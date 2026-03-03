@@ -63,11 +63,38 @@ function toggleCart() {
 }
 
 function searchProducts() {
-  const input = document.getElementById("search-input").value.toLowerCase();
+  const searchValue = document
+    .getElementById("search-input")
+    .value
+    .toLowerCase()
+    .trim();
 
-  const filtered = products.filter(product =>
-    product.name.toLowerCase().includes(input)
+  const productContainer = document.getElementById("product-container");
+
+  // Filter products
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchValue)
   );
 
-  displayProducts(filtered);
+  productContainer.innerHTML = "";
+
+  if (filteredProducts.length === 0) {
+    productContainer.innerHTML = `
+      <div class="not-found">
+        <h2>Product Not Found!</h2>
+        <p>Try searching with a different keyword.</p>
+      </div>
+    `;
+    return;
+  }
+  if (searchValue === "") {
+  displayProducts();
+  return;
+}
+
+  displayProducts(filteredProducts);
+}
+function handleSearch(event) {
+  event.preventDefault(); // prevents page reload
+  searchProducts();
 }
